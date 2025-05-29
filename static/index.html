@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice AI Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .main {
+            padding: 30px;
+        }
+        
+        .upload-section, .chat-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            border: 2px dashed #e0e0e0;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+        }
+        
+        .upload-section:hover, .chat-section:hover {
+            border-color: #4facfe;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title::before {
+            content: "?";
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .chat-section .section-title::before {
+            content: "?";
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-input-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .file-input-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .upload-button, .chat-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.2s;
+            margin-left: 10px;
+        }
+        
+        .upload-button:hover, .chat-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .upload-button:disabled, .chat-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .chat-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+        
+        .response {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #4facfe;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4facfe;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #fee;
+            border-left-color: #e74c3c;
+            color: #c0392b;
+        }
+        
+        .success {
+            background: #efe;
+            border-left-color: #27ae60;
+            color: #2c3e50;
+        }
+        
+        .conversations {
+            margin-top: 30px;
+        }
+        
+        .conversation-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .conversation-meta {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>? Voice AI Agent</h1>
+            <p>?????AI????????????????????????</p>
+        </div>
+        
+        <div class="main">
+            <!-- ????????????? -->
+            <div class="upload-section">
+                <h2 class="section-title">?????????????</h2>
+                <div class="file-input-wrapper">
+                    <input type="file" id="audioFile" class="file-input" accept=".wav,.mp3,.m4a,.ogg,.flac">
+                    <label for="audioFile" class="file-input-button">
+                        ? ???????
+                    </label>
+                </div>
+                <button onclick="uploadAudio()" class="upload-button" id="uploadBtn" disabled>
+                    ? ??????
+                </button>
+                <div id="uploadLoading" class="loading">
+                    <div class="spinner"></div>
+                    ?????...
+                </div>
+                <div id="uploadResponse" class="response" style="display: none;"></div>
+            </div>
+            
+            <!-- ????????????? -->
+            <div class="chat-section">
+                <h2 class="section-title">????????</h2>
+                <input type="text" id="chatInput" class="chat-input" placeholder="??????????????..." onkeypress="handleEnter(event)">
+                <button onclick="sendChat()" class="chat-button" id="chatBtn">
+                    ? ??
+                </button>
+                <div id="chatLoading" class="loading">
+                    <div class="spinner"></div>
+                    AI?????...
+                </div>
+                <div id="chatResponse" class="response" style="display: none;"></div>
+            </div>
+            
+            <!-- ???? -->
+            <div class="conversations">
+                <h2 class="section-title">? ?????</h2>
+                <button onclick="loadConversations()" class="chat-button">
+                    ? ???????
+                </button>
+                <div id="conversationsList"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Voice AI Agent v1.0 | <a href="/docs" target="_blank">API ??????</a> | <a href="/health" target="_blank">???????</a></p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+        
+        // ??????????
+        document.getElementById('audioFile').addEventListener('change', function(e) {
+            const uploadBtn = document.getElementById('uploadBtn');
+            uploadBtn.disabled = !e.target.files.length;
+            
+            if (e.target.files.length) {
+                const fileName = e.target.files[0].name;
+                document.querySelector('.file-input-button').textContent = `? ${fileName}`;
+            }
+        });
+        
+        // ????????
+        async function uploadAudio() {
+            const fileInput = document.getElementById('audioFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('?????????????');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            const uploadBtn = document.getElementById('uploadBtn');
+            const loading = document.getElementById('uploadLoading');
+            const response = document.getElementById('uploadResponse');
+            
+            try {
+                uploadBtn.disabled = true;
+                loading.classList.add('show');
+                response.style.display = 'none';
+                
+                const result = await fetch(`${API_BASE}/upload-audio`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await result.json();
+                
+                if (result.ok) {
+                    response.innerHTML = `
+                        <h3>? ????????</h3>
+                        <p><strong>????:</strong> ${data.filename}</p>
+                        <p><strong>?????:</strong> ${data.status}</p>
+                        <p>??????????????????...</p>
+                    `;
+                    response.className = 'response success';
+                } else {
+                    response.innerHTML = `
+                        <h3>? ???</h3>
+                        <p>${data.detail || '?????????????'}</p>
+                    `;
+                    response.className = 'response error';
+                }
+                
+            } catch (error) {
+                response.innerHTML = `
+                    <h3>? ???</h3>
+                    <p>?????????: ${error.message}</p>
+                `;
+                response.className = 'response error';
+            } finally {
+                loading.classList.remove('show');
+                response.style.display = 'block';
+                uploadBtn.disabled = false;
+            }
+        }
+        
+        // ??????
+        async function sendChat() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) {
+                alert('??????????????');
+                return;
+            }
+            
+            const chatBtn = document.getElementById('chatBtn');
+            const loading = document.getElementById('chatLoading');
+            const response = document.getElementById('chatResponse');
+            
+            try {
+                chatBtn.disabled = true;
+                loading.classList.add('show');
+                response.style.display = 'none';
+                
+                const result = await fetch(`${API_BASE}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        include_context: true
+                    })
+                });
+                
+                const data = await result.json();
+                
+                if (result.ok) {
+                    response.innerHTML = `
+                        <h3>? AI??</h3>
+                        <p><strong>???:</strong> ${message}</p>
+                        <p><strong>AI:</strong> ${data.response}</p>
+                        <small>???: ${data.metadata?.model_used || '??'}</small>
+                    `;
+                    response.className = 'response success';
+                    input.value = '';
+                } else {
+                    response.innerHTML = `
+                        <h3>? ???</h3>
+                        <p>${data.detail || '?????????????'}</p>
+                    `;
+                    response.className = 'response error';
+                }
+                
+            } catch (error) {
+                response.innerHTML = `
+                    <h3>? ???</h3>
+                    <p>?????????: ${error.message}</p>
+                `;
+                response.className = 'response error';
+            } finally {
+                loading.classList.remove('show');
+                response.style.display = 'block';
+                chatBtn.disabled = false;
+            }
+        }
+        
+        // Enter?????????
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendChat();
+            }
+        }
+        
+        // ?????????
+        async function loadConversations() {
+            const conversationsList = document.getElementById('conversationsList');
+            
+            try {
+                const result = await fetch(`${API_BASE}/conversations?limit=5`);
+                const data = await result.json();
+                
+                if (result.ok && data.conversations) {
+                    let html = '';
+                    data.conversations.forEach(conv => {
+                        const date = new Date(conv.timestamp).toLocaleString('ja-JP');
+                        html += `
+                            <div class="conversation-item">
+                                <div class="conversation-meta">${date}</div>
+                                <p><strong>??:</strong> ${conv.transcribed_text}</p>
+                                <p><strong>??:</strong> ${conv.ai_response}</p>
+                            </div>
+                        `;
+                    });
+                    conversationsList.innerHTML = html || '<p>??????????</p>';
+                } else {
+                    conversationsList.innerHTML = '<p>??????????????</p>';
+                }
+                
+            } catch (error) {
+                conversationsList.innerHTML = `<p>???: ${error.message}</p>`;
+            }
+        }
+        
+        // ??????????????????
+        window.addEventListener('load', loadConversations);
+    </script>
+</body>
+</html>
