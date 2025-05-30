@@ -252,38 +252,6 @@ class DatabaseManager:
             
             await db.commit()
             logger.info(f"Cleaned up data older than {days} days")
-    
-    async def get_conversation_summary(self, days: int = 7) -> Dict[str, Any]:
-        """Get conversation summary for recent period."""
-        async with aiosqlite.connect(self.db_path) as db:
-            summary = {}
-            
-            # Recent conversation count
-            async with db.execute("""
-                SELECT COUNT(*) FROM conversations 
-                WHERE timestamp > datetime('now', '-{} days')
-            """.format(days)) as cursor:
-                summary['recent_conversations'] = (await cursor.fetchone())[0]
-            
-            # Most active day
-            async with db.execute("""
-                SELECT DATE(timestamp) as date, COUNT(*) as count
-                FROM conversations 
-                WHERE timestamp > datetime('now', '-{} days')
-                GROUP BY date 
-                ORDER BY count DESC 
-                LIMIT 1
-            """.format(days)) as cursor:
-                row = await cursor.fetchone()
-                if row:
-                    summary['most_active_day'] = {
-                        'date': row[0],
-                        'count': row[1]
-                    }
-                else:
-                    summary['most_active_day'] = None
-            
-            return summary
 
 # Global database instance
 db_manager = DatabaseManager()
