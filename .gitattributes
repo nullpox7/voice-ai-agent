@@ -1,0 +1,75 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Force text files to have LF line endings
+*.py text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.sh text eol=lf
+
+# Ensure these files are always treated as text and use UTF-8 encoding
+*.py text encoding=UTF-8
+*.html text encoding=UTF-8
+*.css text encoding=UTF-8
+*.js text encoding=UTF-8
+*.json text encoding=UTF-8
+*.md text encoding=UTF-8
+*.txt text encoding=UTF-8
+*.yml text encoding=UTF-8
+*.yaml text encoding=UTF-8
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.fla binary
+*.swf binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.pyc binary
+*.pdf binary
+*.ez binary
+*.bz2 binary
+*.swp binary
+*.db binary
+*.sqlite binary
+
+# Jupyter Notebooks
+*.ipynb text eol=lf
+
+# Dockerfile
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+
+# Environment files
+.env* text eol=lf
+
+# Configuration files
+*.conf text eol=lf
+*.config text eol=lf
+*.ini text eol=lf
+
+# Shell scripts should have Unix line endings
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Batch files should have Windows line endings on Windows
+*.bat text eol=crlf
+*.cmd text eol=crlf
