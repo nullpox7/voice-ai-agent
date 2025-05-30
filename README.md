@@ -2,7 +2,7 @@
 
 Real-time AI voice recognition and conversation system
 
-[????README](README_JP.md) | [English README](README.md)
+[Japanese README](README_JP.md) | [English README](README.md)
 
 ---
 
@@ -163,6 +163,6 @@ MIT License
 
 **Voice AI Agent** - Powering new conversation experiences with voice and AI ?
 
-## Note
+## Note on Encoding
 
-Due to encoding issues with automated updates, the Japanese README (README_JP.md) may display garbled characters. This will be manually fixed in a future update to ensure proper UTF-8 encoding.
+Some files may display encoding issues when viewed on GitHub due to legacy UTF-8 handling. The functionality of the voice AI agent remains unaffected. For the most current documentation, please refer to this English README.
