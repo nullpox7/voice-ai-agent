@@ -138,7 +138,7 @@
     <div class="container">
         <div class="header">
             <h1>? Voice AI Agent</h1>
-            <p>?????AI????????????????????????</p>
+            <p>??????AI???????????</p>
         </div>
         
         <div class="main">
@@ -150,25 +150,25 @@
                 </button>
                 <div id="uploadLoading" class="loading">
                     <div class="spinner"></div>
-                    ?????...
+                    ???...
                 </div>
                 <div id="uploadResponse" class="response-box" style="display: none;"></div>
             </div>
             
             <div class="section">
-                <h2 class="section-title">? ????????</h2>
+                <h2 class="section-title">? ???????</h2>
                 <input type="text" id="chatInput" class="input-field" placeholder="??????????????...">
                 <button onclick="sendChat()" class="btn">? ??</button>
                 <div id="chatLoading" class="loading">
                     <div class="spinner"></div>
-                    AI?????...
+                    AI????...
                 </div>
                 <div id="chatResponse" class="response-box" style="display: none;"></div>
             </div>
             
             <div class="section">
-                <h2 class="section-title">? ?????</h2>
-                <button onclick="loadConversations()" class="btn">? ???????</button>
+                <h2 class="section-title">? ????</h2>
+                <button onclick="loadConversations()" class="btn">? ?????</button>
                 <div id="conversationsList"></div>
             </div>
         </div>
@@ -205,7 +205,7 @@
                 if (result.ok) {
                     response.innerHTML = `
                         <h3>? ????????</h3>
-                        <p><strong>????:</strong> ${data.filename}</p>
+                        <p><strong>?????:</strong> ${data.filename}</p>
                         <p><strong>?????:</strong> ${data.status}</p>
                     `;
                 } else {
