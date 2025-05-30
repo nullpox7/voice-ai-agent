@@ -2,6 +2,10 @@
 
 Real-time AI voice recognition and conversation system
 
+[????README](README_JP.md) | [English README](README.md)
+
+---
+
 ## Overview
 
 Voice AI Agent is a real-time voice conversation system that combines faster-whisper for high-speed speech recognition with OpenAI API for intelligent AI dialogue. You can engage in natural conversations with AI agents through voice file uploads and text chat.
@@ -158,3 +162,7 @@ MIT License
 ---
 
 **Voice AI Agent** - Powering new conversation experiences with voice and AI ?
+
+## Note
+
+Due to encoding issues with automated updates, the Japanese README (README_JP.md) may display garbled characters. This will be manually fixed in a future update to ensure proper UTF-8 encoding.
