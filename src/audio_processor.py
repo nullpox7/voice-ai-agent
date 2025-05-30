@@ -327,42 +327,6 @@ class AudioProcessor:
             self.model_size = model_size
             self.model = None  # Clear current model
             await self.initialize_model()
-    
-    def get_supported_languages(self) -> Dict[str, str]:
-        """Get list of supported languages for Whisper."""
-        return {
-            'ja': 'Japanese',
-            'en': 'English', 
-            'zh': 'Chinese',
-            'ko': 'Korean',
-            'es': 'Spanish',
-            'fr': 'French',
-            'de': 'German',
-            'it': 'Italian',
-            'pt': 'Portuguese',
-            'ru': 'Russian',
-            'ar': 'Arabic',
-            'hi': 'Hindi',
-            'th': 'Thai',
-            'vi': 'Vietnamese'
-        }
-    
-    async def get_audio_info(self, file_path: Path) -> Dict[str, Any]:
-        """Get detailed audio file information."""
-        if not self._validate_audio_file(file_path):
-            raise ValueError(f"Invalid audio file: {file_path}")
-        
-        metadata = self._get_audio_metadata(file_path)
-        
-        return {
-            'filename': file_path.name,
-            'size': metadata.get('file_size', 0),
-            'duration': metadata.get('duration', 0),
-            'format': metadata.get('format', ''),
-            'sample_rate': metadata.get('sample_rate', 0),
-            'channels': metadata.get('channels', 1),
-            'supported': file_path.suffix.lower() in self.supported_formats
-        }
 
 
 # Global audio processor instance
