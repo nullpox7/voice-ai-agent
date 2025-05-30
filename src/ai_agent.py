@@ -175,12 +175,12 @@ class AIAgent:
         user_lower = user_input.lower()
         
         responses = {
-            '?????': '?????????????????',
-            '?????': '?????????',
-            '??': '???????????????????????????',
-            '??': f'??????{datetime.now().strftime("%H?%M?")}???',
-            '??': f'???{datetime.now().strftime("%Y?%m?%d?")}???',
-            '?????': '???????????????????'
+            'こんにちは': 'こんにちは！いかがお過ごしですか？',
+            'ありがとう': 'どういたしまして！',
+            '天気': '申し訳ございませんが、現在の天気情報は取得できません。',
+            '時間': f'現在の時刻は{datetime.now().strftime("%H時%M分")}です。',
+            '日付': f'今日は{datetime.now().strftime("%Y年%m月%d日")}です。',
+            'さようなら': 'さようなら！また話しかけてくださいね。'
         }
         
         # Check for keyword matches
@@ -193,15 +193,15 @@ class AIAgent:
         # Default response if no keyword matches
         if not response_text:
             if len(user_input) > 100:
-                response_text = '?????????????????????????????????????????'
-            elif '?' in user_input or '?' in user_input:
-                response_text = '?????????????????????????AI??????????????'
+                response_text = 'とても詳しくお話いただき、ありがとうございます。もう少し具体的にお聞かせください。'
+            elif '?' in user_input or '？' in user_input:
+                response_text = 'ご質問をありがとうございます。お手伝いできるよう、AIサービスを準備しております。'
             else:
-                response_text = '?????????????????????????????'
+                response_text = 'お話をお聞きしました。何かお手伝いできることはありますか？'
         
         # Add context-aware elements
         if conversation_context and len(conversation_context) > 0:
-            response_text += f'\n\n???{len(conversation_context)}??????????????'
+            response_text += f'\n\n（過去{len(conversation_context)}回の会話を参考にしています）'
         
         return {
             'response': response_text,
@@ -226,8 +226,8 @@ class AIAgent:
     async def analyze_conversation_sentiment(self, text: str) -> Dict[str, Any]:
         """Analyze the sentiment of the conversation."""
         # Simple sentiment analysis based on keywords
-        positive_words = ['?????', '???', '???', '???', '?????', '??']
-        negative_words = ['???', '??', '?', '??', '??', '??']
+        positive_words = ['ありがとう', '嬉しい', '楽しい', 'すごい', '素晴らしい', '良い']
+        negative_words = ['悲しい', '困る', '嫌', 'だめ', '悪い', '問題']
         
         text_lower = text.lower()
         positive_count = sum(1 for word in positive_words if word in text_lower)
@@ -256,7 +256,7 @@ class AIAgent:
         import re
         
         # Extract dates
-        date_pattern = r'\d{4}?\d{1,2}?\d{1,2}?|\d{1,2}?\d{1,2}?'
+        date_pattern = r'\d{4}年\d{1,2}月\d{1,2}日|\d{1,2}月\d{1,2}日'
         dates = re.findall(date_pattern, text)
         
         # Extract numbers
@@ -281,7 +281,7 @@ class AIAgent:
     async def get_conversation_summary(self, conversations: List[Dict[str, Any]]) -> str:
         """Generate a summary of recent conversations."""
         if not conversations:
-            return "???????????"
+            return "会話履歴がありません。"
         
         total_conversations = len(conversations)
         recent_topics = []
@@ -294,9 +294,9 @@ class AIAgent:
                 recent_topics.append(text)
         
         summary = f"""
-?????:
-- ????: {total_conversations}?
-- ?????:
+会話の要約:
+- 総会話数: {total_conversations}回
+- 最近の話題:
 """
         
         for i, topic in enumerate(recent_topics, 1):
