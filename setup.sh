@@ -10,7 +10,7 @@ mkdir -p data logs uploads models src static
 
 # Copy .env.example to .env if not exists
 if [ ! -f .env ]; then
-    echo "? Creating .env file..."
+    echo "?? Creating .env file..."
     cp .env.example .env
     echo "??  Please edit .env file to configure API keys"
 else
@@ -29,7 +29,7 @@ if command -v python3 &> /dev/null; then
         pip install -r requirements.txt
         echo "? Python dependencies installed successfully"
     else
-        echo "??  Failed to create virtual environment"
+        echo "?  Failed to create virtual environment"
     fi
 fi
 
@@ -43,10 +43,10 @@ if command -v docker &> /dev/null; then
         docker-compose build
         echo "? Docker build completed"
     else
-        echo "??  docker-compose not found"
+        echo "?  docker-compose not found"
     fi
 else
-    echo "??  Docker not found. Please install manually."
+    echo "?  Docker not found. Please install manually."
 fi
 
 echo ""
