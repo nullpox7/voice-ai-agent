@@ -119,19 +119,11 @@ async def health_check():
         }
     }
 
-# Root endpoint - Web interface
+# Root endpoint
 @app.get("/")
 async def root():
     """Root endpoint - Redirect to web interface"""
-    try:
-        return FileResponse('static/index.html')
-    except FileNotFoundError:
-        return {
-            "message": "Voice AI Agent is running!",
-            "docs": "/docs",
-            "health": "/health",
-            "note": "Web interface not available. Visit /docs for API documentation."
-        }
+    return FileResponse('static/index.html')
 
 # Audio upload and processing endpoint
 @app.post("/upload-audio")
@@ -330,52 +322,6 @@ async def get_stats():
     except Exception as e:
         logger.error(f"Failed to get stats: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to get stats: {str(e)}")
-
-# Configuration endpoint
-@app.post("/config")
-async def update_config(config: ConfigUpdate):
-    """Update application configuration."""
-    try:
-        updated = []
-        
-        if config.whisper_model:
-            await audio_processor.change_model(config.whisper_model)
-            updated.append(f"whisper_model: {config.whisper_model}")
-        
-        if config.ai_model or config.temperature is not None or config.max_tokens:
-            ai_agent.update_model_settings(
-                model=config.ai_model,
-                temperature=config.temperature,
-                max_tokens=config.max_tokens
-            )
-            if config.ai_model:
-                updated.append(f"ai_model: {config.ai_model}")
-            if config.temperature is not None:
-                updated.append(f"temperature: {config.temperature}")
-            if config.max_tokens:
-                updated.append(f"max_tokens: {config.max_tokens}")
-        
-        return {
-            "message": "Configuration updated successfully",
-            "updated": updated
-        }
-        
-    except Exception as e:
-        logger.error(f"Failed to update config: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to update config: {str(e)}")
-
-@app.get("/config")
-async def get_config():
-    """Get current configuration."""
-    try:
-        return {
-            "audio_processor": audio_processor.get_model_info(),
-            "ai_agent": ai_agent.get_agent_info()
-        }
-        
-    except Exception as e:
-        logger.error(f"Failed to get config: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to get config: {str(e)}")
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
