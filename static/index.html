@@ -150,31 +150,31 @@
                 </button>
                 <div id="uploadLoading" class="loading">
                     <div class="spinner"></div>
-                    アップロード中...
+                    処理中...
                 </div>
                 <div id="uploadResponse" class="response-box" style="display: none;"></div>
             </div>
             
             <div class="section">
-                <h2 class="section-title">? ???????</h2>
-                <input type="text" id="chatInput" class="input-field" placeholder="??????????????...">
-                <button onclick="sendChat()" class="btn">? ??</button>
+                <h2 class="section-title">💬 テキストで対話</h2>
+                <input type="text" id="chatInput" class="input-field" placeholder="メッセージを入力してください...">
+                <button onclick="sendChat()" class="btn">💭 送信</button>
                 <div id="chatLoading" class="loading">
                     <div class="spinner"></div>
-                    AIが処理中...
+                    AIが回答中...
                 </div>
                 <div id="chatResponse" class="response-box" style="display: none;"></div>
             </div>
             
             <div class="section">
-                <h2 class="section-title">? ????</h2>
-                <button onclick="loadConversations()" class="btn">? ?????</button>
+                <h2 class="section-title">📝 会話履歴</h2>
+                <button onclick="loadConversations()" class="btn">📚 履歴を表示</button>
                 <div id="conversationsList"></div>
             </div>
         </div>
         
         <div class="footer">
-            <p>Voice AI Agent v1.0 | <a href="/docs">API ??????</a> | <a href="/health">???????</a></p>
+            <p>Voice AI Agent v1.0 | <a href="/docs">API ドキュメント</a> | <a href="/health">ヘルスチェック</a></p>
         </div>
     </div>
 
@@ -183,7 +183,7 @@
             const fileInput = document.getElementById('audioFile');
             const file = fileInput.files[0];
             
-            if (!file) return alert('ファイルが見つかりません');
+            if (!file) return alert('ファイルを選択してください');
             
             const formData = new FormData();
             formData.append('file', file);
@@ -204,16 +204,16 @@
                 
                 if (result.ok) {
                     response.innerHTML = `
-                        <h3>? ????????</h3>
-                        <p><strong>?????:</strong> ${data.filename}</p>
-                        <p><strong>?????:</strong> ${data.status}</p>
+                        <h3>✅ アップロード成功</h3>
+                        <p><strong>ファイル名:</strong> ${data.filename}</p>
+                        <p><strong>ステータス:</strong> ${data.status}</p>
                     `;
                 } else {
-                    response.innerHTML = `<h3>? ???</h3><p>${data.detail}</p>`;
+                    response.innerHTML = `<h3>❌ エラー</h3><p>${data.detail}</p>`;
                 }
                 
             } catch (error) {
-                response.innerHTML = `<h3>? ???</h3><p>${error.message}</p>`;
+                response.innerHTML = `<h3>❌ エラー</h3><p>${error.message}</p>`;
             } finally {
                 loading.classList.remove('show');
                 response.style.display = 'block';
@@ -224,7 +224,7 @@
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
             
-            if (!message) return alert('??????????????');
+            if (!message) return alert('メッセージを入力してください');
             
             const loading = document.getElementById('chatLoading');
             const response = document.getElementById('chatResponse');
@@ -243,17 +243,17 @@
                 
                 if (result.ok) {
                     response.innerHTML = `
-                        <h3>? AI??</h3>
-                        <p><strong>???:</strong> ${message}</p>
+                        <h3>🤖 AI回答</h3>
+                        <p><strong>あなた:</strong> ${message}</p>
                         <p><strong>AI:</strong> ${data.response}</p>
                     `;
                     input.value = '';
                 } else {
-                    response.innerHTML = `<h3>? ???</h3><p>${data.detail}</p>`;
+                    response.innerHTML = `<h3>❌ エラー</h3><p>${data.detail}</p>`;
                 }
                 
             } catch (error) {
-                response.innerHTML = `<h3>? ???</h3><p>${error.message}</p>`;
+                response.innerHTML = `<h3>❌ エラー</h3><p>${error.message}</p>`;
             } finally {
                 loading.classList.remove('show');
                 response.style.display = 'block';
@@ -274,22 +274,22 @@
                         html += `
                             <div style="margin: 15px 0; padding: 15px; background: white; border-radius: 8px;">
                                 <small style="color: #666;">${date}</small>
-                                <p><strong>??:</strong> ${conv.transcribed_text}</p>
-                                <p><strong>??:</strong> ${conv.ai_response}</p>
+                                <p><strong>質問:</strong> ${conv.transcribed_text}</p>
+                                <p><strong>回答:</strong> ${conv.ai_response}</p>
                             </div>
                         `;
                     });
                     list.innerHTML = html;
                 } else {
-                    list.innerHTML = '<p>??????????</p>';
+                    list.innerHTML = '<p>会話履歴がありません</p>';
                 }
                 
             } catch (error) {
-                list.innerHTML = `<p>???: ${error.message}</p>`;
+                list.innerHTML = `<p>エラー: ${error.message}</p>`;
             }
         }
         
-        // ???
+        // 初期化
         window.addEventListener('load', loadConversations);
         
         // Enter key support
