@@ -137,20 +137,20 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>? Voice AI Agent</h1>
-            <p>??????AI???????????</p>
+            <h1>🎤 Voice AI Agent</h1>
+            <p>リアルタイムAI音声認識・対話システム</p>
         </div>
         
         <div class="main">
             <div class="section">
-                <h2 class="section-title">? ?????????????</h2>
+                <h2 class="section-title">🎵 音声ファイルをアップロード</h2>
                 <input type="file" id="audioFile" accept=".wav,.mp3,.m4a,.ogg,.flac">
                 <button onclick="uploadAudio()" class="btn" id="uploadBtn">
-                    ? ??????
+                    📤 アップロード
                 </button>
                 <div id="uploadLoading" class="loading">
                     <div class="spinner"></div>
-                    ???...
+                    アップロード中...
                 </div>
                 <div id="uploadResponse" class="response-box" style="display: none;"></div>
             </div>
@@ -161,7 +161,7 @@
                 <button onclick="sendChat()" class="btn">? ??</button>
                 <div id="chatLoading" class="loading">
                     <div class="spinner"></div>
-                    AI????...
+                    AIが処理中...
                 </div>
                 <div id="chatResponse" class="response-box" style="display: none;"></div>
             </div>
@@ -183,7 +183,7 @@
             const fileInput = document.getElementById('audioFile');
             const file = fileInput.files[0];
             
-            if (!file) return alert('?????????????');
+            if (!file) return alert('ファイルが見つかりません');
             
             const formData = new FormData();
             formData.append('file', file);
